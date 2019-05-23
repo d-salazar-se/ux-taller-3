@@ -1,0 +1,60 @@
+body {
+  font-size: 16px;
+  color: rgb(111, 111, 111);
+  font-family: sans-serif;
+}
+
+h3,
+form {
+  text-align: center;
+}  
+
+input[type="text"] {
+  padding: 4px;
+  border: 1px solid rgb(111, 111, 111);
+  height: 23px;
+}
+
+#btn-agregar {
+  background-color: rgb(94, 149, 233);
+  color: #fff;
+  border: 1px solid transparent;
+  font-size: 14px;
+  margin-left: -4px;
+  height: 23px;
+}
+
+ul.lista-todo {
+  list-style: none;
+  padding: 0px;
+}
+
+li.tarea {
+  padding: 4px;
+}
+
+li.tarea:nth-child(odd) {
+  background-color: rgb(238, 238, 238);
+}
+
+li.tarea:nth-child(even) {
+  background-color: #fff;
+}
+
+li.tarea>input[type=checkbox] {
+  padding: 4px;
+}
+
+li.tarea>input[type=checkbox]:checked+label {
+  text-decoration: line-through;
+}
+
+li.tarea>.boton {
+  cursor: pointer;
+  float: right;
+  background-color: #fff;
+  border: 1px solid rgb(111, 111, 111);
+  border-radius: 3px;
+  color: rgb(111, 111, 111);
+  font-size: 14px;
+}
