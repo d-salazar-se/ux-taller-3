@@ -70,29 +70,29 @@ function getFromDB() {
 
 function add() {
   let input = document.querySelector("#nuevatarea-ipt");
-	let text = input.value;
-	let task = create(text);
-	store(task);
+  let text = input.value;
+  let task = create(text);
+  store(task);
   input.value = "";
-	return false;
+  return false;
 }
 
 function create(text) {
-	return {
-		texto: text,
-		terminado: false,
-	}
+  return {
+    texto: text,
+    terminado: false,
+  }
 }
 
 function store(task) {
-	let transaction = db.transaction(STORE_NAME, 'readwrite');
-	let objectStore = transaction.objectStore(STORE_NAME);
+  let transaction = db.transaction(STORE_NAME, 'readwrite');
+  let objectStore = transaction.objectStore(STORE_NAME);
 
-	let request = objectStore.add(task);
-	
+  let request = objectStore.add(task);
+  
   request.onsuccess = () => {
-		updateTodoList();
-	};
+    updateTodoList();
+  };
 
   request.error = () => {
     console.log("error al guardar");
@@ -146,7 +146,7 @@ function updateTodoList(tasks) {
     return;
   }
 
-	let ul = document.querySelector("#lista-todo");
+  let ul = document.querySelector("#lista-todo");
 
   let child = ul.lastElementChild;  
   while (child) { 
@@ -154,11 +154,11 @@ function updateTodoList(tasks) {
     child = ul.lastElementChild; 
   }
 
-	let li, input, label, button;
+  let li, input, label, button;
 
   for (let i = 0; i < tasks.length; i++) {
     li = document.createElement("li");
-  	li.classList.add("tarea");
+    li.classList.add("tarea");
 
     input = document.createElement("input");
     input.type = "checkbox";
