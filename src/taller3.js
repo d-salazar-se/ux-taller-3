@@ -188,4 +188,10 @@ function updateTodoList(tasks) {
 
     ul.appendChild(li);
   }
+
+  updateBarChart();
+}
+
+function updateBarChart() {
+  
 }
