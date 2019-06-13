@@ -15,6 +15,20 @@ input[type="text"] {
   height: 23px;
 }
 
+/* 2 cols */
+.row {
+  display: -ms-flex;
+  -ms-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
 #btn-agregar {
   background-color: rgb(94, 149, 233);
   color: #fff;
@@ -57,4 +71,20 @@ li.tarea>.boton {
   border-radius: 3px;
   color: rgb(111, 111, 111);
   font-size: 14px;
+}
+
+/* SVG CHART */
+.bar {
+  fill: steelblue;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }

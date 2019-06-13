@@ -3,6 +3,17 @@ var DB_VERSION = 1;
 var STORE_NAME = 'tasks';
 var db;
 
+var settings = {
+  margin: {top: 50, right: 50, bottom: 50, left: 50},
+  width: 200,  // 300 - margenes
+  height: 300, // 400 - margenes
+  svg: null,
+  x: null,
+  xAxis: null,
+  y: null,
+  yAxis: null
+};
+
 document.addEventListener("DOMContentLoaded", initDB);
 
 function initDB() {
@@ -189,9 +200,98 @@ function updateTodoList(tasks) {
     ul.appendChild(li);
   }
 
-  updateBarChart();
+  updateBarChart(tasks);
 }
 
-function updateBarChart() {
+function createBarChart() {
+  settings.x = d3.scaleBand().rangeRound([0, settings.width]);
+  settings.y = d3.scaleLinear().rangeRound([settings.height, 0], 1);
+
+  settings.xAxis = g => g
+      .attr("transform", `translate(${settings.margin.left}, ${settings.height})`)
+      .call(d3.axisBottom(settings.x).tickSizeOuter(2));
+
+  settings.yAxis = g => g
+      .attr("transform", `translate(${settings.margin.left}, 0)`)
+      .call(d3.axisLeft(settings.y));
+
+  settings.svg = d3.select("#chart")
+      .attr("width", settings.width + settings.margin.left + settings.margin.right)
+      .attr("height", settings.height + settings.margin.top + settings.margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${settings.margin.left}, ${settings.margin.top})`);
+
+  // Dibujar etiqueta eje X
+  settings.svg
+    .append("text")
+    .attr("transform", `translate(${settings.margin.left/2 - 10}, ${settings.height/2 + settings.margin.top}) rotate(-90)`)
+    .text("Nº de Tareas");
+
+  // Dibujar etiqueta eje Y
+  settings.svg
+    .append("text")
+    .attr("transform", `translate(${settings.margin.left + (settings.width/2)}, ${settings.height + settings.margin.bottom - 10})`)
+    .style("text-anchor", "middle")
+    .text("Estado");
+}
+
+function updateBarChart(tasks) {
+  if ( ! settings.svg) {
+    createBarChart();
+  }
+
+  var terminados = tasks.filter(task => task.terminado).length;
+  var pendientes = tasks.length - terminados;
+
+  var data = [
+    { label: "Pendientes", value: pendientes },
+    { label: "Terminadas", value: terminados }
+  ];
+
+  let maxY = terminados > pendientes ? terminados : pendientes;
+  settings.x.domain(["Pendientes", "Terminadas"]);
+  settings.y.domain([0, maxY]);
+
+  d3.selectAll(".x-axis").remove();
+  d3.selectAll(".y-axis").remove();
+
+  // Dibujar y posicionar eje X abajo
+  settings.svg
+    .append("g")
+    .attr("class", "x-axis")
+    .call(settings.xAxis);
+
+  // Dibujar y posicionar eje Y
+  settings.svg
+    .append("g")
+    .attr("class", "y-axis")
+    .call(settings.yAxis);
+
+  // Enter
   
+  // Dibujar barras
+  var chartCol = settings.svg.selectAll("g.chartCol")
+    .data(data, d => d.label)
+
+  var newCol = chartCol
+    .enter()
+    .append("g")
+    .attr("class", "chartCol")
+    .attr("transform", `translate(${settings.margin.left + 25}, 0)`)
+
+  newCol.insert("rect")
+    .attr("class", "bar")
+    .attr("x", d => settings.x(d.label))
+    .attr("y", d => settings.y(d.value))
+    .attr("height", settings.height)
+    .attr("width", 50);
+
+  // Animar cambios
+  chartCol.select(".bar")
+    .transition()
+    .duration(300)
+    .attr("height", d => settings.height - settings.y(d.value));
+
+  // Exit
+  chartCol.exit().remove();
 }
