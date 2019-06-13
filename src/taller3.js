@@ -283,13 +283,14 @@ function updateBarChart(tasks) {
     .attr("class", "bar")
     .attr("x", d => settings.x(d.label))
     .attr("y", d => settings.y(d.value))
-    .attr("height", settings.height)
+    .attr("height", d => settings.height - settings.y(d.value))
     .attr("width", 50);
 
   // Animar cambios
   chartCol.select(".bar")
     .transition()
     .duration(300)
+    .attr("y", d => settings.y(d.value))
     .attr("height", d => settings.height - settings.y(d.value));
 
   // Exit
