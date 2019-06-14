@@ -66,10 +66,13 @@ function getFromDB() {
   let transaction = db.transaction(STORE_NAME, 'readonly');
   let objectStore = transaction.objectStore(STORE_NAME);
 
+  const notTheFirstTime = localStorage.getItem("NotTheFirstTime");
+
   if ('getAll' in objectStore) {
     objectStore.getAll().onsuccess = (event) => {
       tasks = event.target.result;
-      if (typeof tasks === 'undefined' || tasks.length == 0) {
+      if (typeof tasks === 'undefined' || !Boolean(notTheFirstTime)) {
+        localStorage.setItem("NotTheFirstTime", true);
         getFromRepo();
         return;
       }
